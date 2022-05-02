@@ -1,6 +1,6 @@
-import { writable } from 'svelte/store';
+import { storable } from './storable';
 
-export const darkMode = writable(false);
+export const darkMode = storable(false, 'dark_mode');
 
 export function toggleDarkMode() {
   darkMode.update((value) => !value);

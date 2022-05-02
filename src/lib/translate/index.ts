@@ -1,5 +1,6 @@
+import { storable } from '$lib/store/storable';
 import { format, getLocaleFromNavigator, init, locale } from 'svelte-i18n';
-import { derived, writable, type Readable } from 'svelte/store';
+import { derived, type Readable } from 'svelte/store';
 import './en';
 import './ru';
 import type { Locales, Messages } from './types';
@@ -26,7 +27,7 @@ export const languages: { [key in Locales]: string } = {
   'en-US': 'English',
 };
 
-export const activeLocale = writable<Locales>('ru-RU');
+export const activeLocale = storable<Locales>('ru-RU', 'locale');
 activeLocale.subscribe((value) => locale.set(value));
 
 export const activeLocaleName = derived(activeLocale, (value) => languages[value]);

@@ -24,7 +24,7 @@
 
     --white-color: white;
     --active-color: rgb(47, 149, 220);
-    
+
     --border-color: rgb(216, 216, 216);
   }
 
@@ -40,5 +40,9 @@
     --active-color: rgb(47, 149, 220);
 
     --border-color: rgb(39, 39, 41);
+  }
+
+  :global(a) {
+    color: var(--active-color);
   }
 </style>

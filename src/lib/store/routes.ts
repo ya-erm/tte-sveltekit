@@ -23,3 +23,7 @@ export const routes: { [key: string]: Route } = {
     title: 'settings.enter_token',
   },
 };
+
+export function findRoute(path: string) {
+  return Object.values(routes).find((route) => route.path == path);
+}

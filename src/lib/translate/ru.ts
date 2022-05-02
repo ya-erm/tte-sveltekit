@@ -2,6 +2,7 @@ import { addMessages } from 'svelte-i18n';
 import type { Dictionary } from './types';
 
 export const ruDict: Dictionary = {
+  'common.back': 'Назад',
   'common.select': 'Выбрать',
   'common.available_variants': 'Доступные варианты',
   'portfolio.title': 'Портфель',

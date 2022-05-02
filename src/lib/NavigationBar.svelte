@@ -1,23 +1,53 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { translate } from '$lib/translate';
-  import { routes } from './store/routes';
+  import { backLink } from './store/navigation';
+  import { findRoute } from './store/routes';
 </script>
 
 <div class="navigation-bar">
-  <div class="mabigation-back-button" />
+  <div class="navigation-back-button">
+    {#if $backLink}
+      <a href={$backLink} on:click={() => backLink.set(null)}>
+        <span class="indicator" />
+        {$translate(findRoute($backLink)?.title ?? 'common.back')}
+      </a>
+    {/if}
+  </div>
   <div class="navigation-title">
-    {$translate(
-      Object.values(routes).find((x) => x.path == $page.url.pathname)?.title ?? 'settings.title',
-    )}
+    {$translate(findRoute($page.url.pathname)?.title ?? 'settings.title')}
   </div>
   <div />
 </div>
 
 <style>
+  .navigation-back-button {
+    display: flex;
+  }
+  .navigation-back-button:hover {
+    opacity: 0.9;
+  }
+  .navigation-back-button:active {
+    opacity: 0.8;
+  }
+  .navigation-back-button a {
+    display: flex;
+    align-items: center;
+    color: var(--active-color);
+    text-decoration: none;
+    padding: 5px;
+  }
+  .navigation-back-button .indicator {
+    flex-shrink: 0;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-color: var(--active-color);
+    mask: url('/icons/chevron-left.svg') no-repeat 50% 50%;
+  }
   .navigation-bar {
     display: grid;
-    grid-template-columns: 60px 1fr 60px;
+    grid-template-columns: 1fr 2fr 1fr;
     background-color: var(--header-background-color);
     border-bottom: 1px solid var(--border-color);
     align-items: center;

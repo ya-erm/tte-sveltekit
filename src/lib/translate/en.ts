@@ -2,6 +2,7 @@ import { addMessages } from 'svelte-i18n';
 import type { Dictionary } from './types';
 
 export const enDict: Dictionary = {
+  'common.back': 'Back',
   'common.select': 'Select',
   'common.available_variants': 'Available variants',
   'portfolio.title': 'Portfolio',

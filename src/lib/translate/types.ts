@@ -1,4 +1,5 @@
 export type Messages =
+  | 'common.back'
   | 'common.select'
   | 'common.available_variants'
   | 'portfolio.title'

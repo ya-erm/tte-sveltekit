@@ -1,12 +1,18 @@
-<script>
+<script lang="ts">
   import { goto } from '$app/navigation';
   import SettingsGroup from '$lib/SettingsGroup.svelte';
   import SettingsSelectItem from '$lib/SettingsSelectItem.svelte';
   import SettingsSwitchItem from '$lib/SettingsSwitchItem.svelte';
+  import { backLink } from '$lib/store/navigation';
   import { routes } from '$lib/store/routes';
   import { darkMode } from '$lib/store/theme';
   import { token } from '$lib/store/token';
   import { activeLocaleName, translate } from '$lib/translate';
+
+  function open(path: string) {
+    backLink.set(routes.settings.path);
+    goto(path);
+  }
 </script>
 
 <SettingsGroup title={$translate('settings.common')}>
@@ -14,7 +20,7 @@
   <SettingsSelectItem
     title={$translate('settings.language')}
     value={$activeLocaleName}
-    on:click={() => goto(routes['settings.language'].path)}
+    on:click={() => open(routes['settings.language'].path)}
   />
 </SettingsGroup>
 
@@ -22,6 +28,6 @@
   <SettingsSelectItem
     title={$translate('settings.token')}
     value={$token || $translate('settings.enter_token')}
-    on:click={() => goto(routes['settings.token'].path)}
+    on:click={() => open(routes['settings.token'].path)}
   />
 </SettingsGroup>

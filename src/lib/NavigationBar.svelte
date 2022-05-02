@@ -1,12 +1,13 @@
 <script lang="ts">
+  import { page } from '$app/stores';
   import { t } from '$lib/translate';
-  import { activeMenuItem } from './store/menu';
+  import { routes } from './store/routes';
 </script>
 
 <div class="navigation-bar">
   <div class="mabigation-back-button" />
   <div class="navigation-title">
-    {$activeMenuItem?.title ? $t($activeMenuItem?.title) : ''}
+    {$t(Object.values(routes).find((x) => x.path == $page.url.pathname)?.title ?? 'settings.title')}
   </div>
   <div />
 </div>

@@ -1,9 +1,12 @@
-
 export type Messages =
-| 'portfolio.title'
-| 'settings.title'
-| 'settings.common'
-| 'settings.language'
-| 'settings.darkMode';
+  | 'common.select'
+  | 'portfolio.title'
+  | 'settings.title'
+  | 'settings.common'
+  | 'settings.language'
+  | 'settings.select_language'
+  | 'settings.darkMode';
 
 export type Dictionary = { [key in Messages]: string };
+
+export type Locales = 'ru-RU' | 'en-US';

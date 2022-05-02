@@ -1,16 +1,19 @@
 <script lang="ts">
   import type { Writable } from 'svelte/store';
+  import SettingsGroupItem from './SettingsGroupItem.svelte';
   import Switch from './Switch.svelte';
 
   export let checked: Writable<boolean>;
   export let title: string;
 </script>
 
-<label class="theme-switch">
-  <input type="checkbox" bind:checked={$checked} />
-  <span>{title}</span>
-  <Switch {checked} />
-</label>
+<SettingsGroupItem>
+  <label class="theme-switch">
+    <input type="checkbox" bind:checked={$checked} />
+    <span>{title}</span>
+    <Switch {checked} />
+  </label>
+</SettingsGroupItem>
 
 <style>
   .theme-switch {

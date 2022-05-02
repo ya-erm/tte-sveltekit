@@ -4,16 +4,19 @@ import { derived, readable } from 'svelte/store';
 import { routes } from './routes';
 
 export type MenuItem = {
+  icon: string;
   title: Messages;
   path: string;
 };
 
 export const menu = readable<MenuItem[]>([
   {
+    icon: '/icons/format-list-bulleted.svg',
     title: 'portfolio.title',
     path: routes.root.path,
   },
   {
+    icon: '/icons/cog-outline.svg',
     title: 'settings.title',
     path: routes.settings.path,
   },

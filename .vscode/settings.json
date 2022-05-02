@@ -1,7 +1,5 @@
 {
-    "editor.tabSize": 2,
-    "cSpell.words": [
-        "sveltejs"
-    ],
-    "editor.formatOnSave": true
+  "editor.tabSize": 2,
+  "cSpell.words": ["browserslist", "sveltejs"],
+  "editor.formatOnSave": true
 }

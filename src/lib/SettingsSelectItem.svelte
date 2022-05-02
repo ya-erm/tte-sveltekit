@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { t } from '$lib/translate';
+  import { translate } from '$lib/translate';
   import { createEventDispatcher } from 'svelte';
   import SettingsGroupItem from './SettingsGroupItem.svelte';
 
@@ -14,7 +14,7 @@
   <div class="container" on:click={click}>
     <span>{title}</span>
     <span class="value-container">
-      <span>{value == undefined ? $t('common.select') : value}</span>
+      <span>{value == undefined ? $translate('common.select') : value}</span>
       <span class="indicator" />
     </span>
   </div>

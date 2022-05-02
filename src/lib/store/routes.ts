@@ -18,4 +18,8 @@ export const routes: { [key: string]: Route } = {
     path: '/settings/language',
     title: 'settings.select_language',
   },
+  'settings.token': {
+    path: '/settings/token',
+    title: 'settings.enter_token',
+  },
 };

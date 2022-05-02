@@ -3,7 +3,7 @@
   import SettingsGroup from '$lib/SettingsGroup.svelte';
   import SettingsSelectOption from '$lib/SettingsSelectOption.svelte';
   import { routes } from '$lib/store/routes';
-  import { activeLocale, languages, type Locales } from '$lib/translate';
+  import { activeLocale, languages, translate, type Locales } from '$lib/translate';
 
   function onClick(locale: Locales | string) {
     activeLocale.set(locale as Locales);
@@ -11,7 +11,7 @@
   }
 </script>
 
-<SettingsGroup>
+<SettingsGroup title={$translate('common.available_variants')}>
   {#each Object.entries(languages) as [key, title]}
     <SettingsSelectOption
       value={title}

@@ -1,13 +1,13 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { t } from '$lib/translate';
+  import { translate } from '$lib/translate';
   import { menu } from './store/menu';
 </script>
 
 <div class="menu-bar">
   {#each $menu as item}
     <a href={item.path} class="menu-item" class:active={$page.url.pathname === item.path}>
-      {$t(item.title)}
+      {$translate(item.title)}
     </a>
   {/each}
 </div>

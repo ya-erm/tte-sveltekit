@@ -7,6 +7,9 @@
   <div class="settings-group-container">
     <slot />
   </div>
+  <div class="settings-group-description">
+    <slot name="description" />
+  </div>
 </div>
 
 <style>
@@ -23,6 +26,12 @@
   }
   .settings-group-container {
     background-color: var(--header-background-color);
+  }
+  .settings-group-description {
+    color: var(--secondary-text-color);
+    line-height: 1.5;
+    font-size: 13px;
+    margin: 10px;
   }
   .settings-group-container {
     border-radius: 10px;

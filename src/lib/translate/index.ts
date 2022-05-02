@@ -20,7 +20,7 @@ type FormatOptions = {
 };
 type MessageFormatter = (id: Messages, options?: FormatOptions) => string;
 
-export const t = format as Readable<MessageFormatter>;
+export const translate = format as Readable<MessageFormatter>;
 
 export const languages: { [key in Locales]: string } = {
   'ru-RU': 'Русский',

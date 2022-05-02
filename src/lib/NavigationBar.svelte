@@ -1,13 +1,15 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { t } from '$lib/translate';
+  import { translate } from '$lib/translate';
   import { routes } from './store/routes';
 </script>
 
 <div class="navigation-bar">
   <div class="mabigation-back-button" />
   <div class="navigation-title">
-    {$t(Object.values(routes).find((x) => x.path == $page.url.pathname)?.title ?? 'settings.title')}
+    {$translate(
+      Object.values(routes).find((x) => x.path == $page.url.pathname)?.title ?? 'settings.title',
+    )}
   </div>
   <div />
 </div>

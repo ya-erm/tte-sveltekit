@@ -1,0 +1,10 @@
+{
+  "globalProperties": {
+    "generateAliasAsModel": true
+  },
+  "supportsES6": true,
+  "useSingleRequestParameter": true,
+  "withSeparateModelsAndApi": false,
+  "modelPackage": "model",
+  "apiPackage": "api"
+}

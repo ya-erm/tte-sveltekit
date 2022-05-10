@@ -16,6 +16,9 @@ export const ruDict: Dictionary = {
   'settings.enter_token': 'Введите API токен',
   'settings.token_description':
     'Для доступа к данным о сделках используется токен, создать его можно в настройках личного кабинета',
+  'settings.portfolio': 'Портфель',
+  'settings.account': 'Счёт',
+  'settings.select_account': 'Выберите счёт',
 };
 
 addMessages('ru-RU', ruDict);

@@ -22,6 +22,10 @@ export const routes: { [key: string]: Route } = {
     path: '/settings/token',
     title: 'settings.enter_token',
   },
+  'settings.account': {
+    path: '/settings/account',
+    title: 'settings.select_account',
+  },
 };
 
 export function findRoute(path: string) {

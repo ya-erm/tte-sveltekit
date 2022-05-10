@@ -8,4 +8,6 @@ token.subscribe((value) => {
   axios.defaults.headers.common['Authorization'] = `Bearer ${value}`;
 });
 
+export const usersApi = UsersServiceApiFactory(undefined, basePath);
+
 export * from './generated';

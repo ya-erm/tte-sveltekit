@@ -11,7 +11,10 @@ export type Messages =
   | 'settings.security'
   | 'settings.token'
   | 'settings.enter_token'
-  | 'settings.token_description';
+  | 'settings.token_description'
+  | 'settings.portfolio'
+  | 'settings.account'
+  | 'settings.select_account';
 
 export type Dictionary = { [key in Messages]: string };
 

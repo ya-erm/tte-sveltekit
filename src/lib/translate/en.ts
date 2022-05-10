@@ -16,6 +16,9 @@ export const enDict: Dictionary = {
   'settings.enter_token': 'Enter API token',
   'settings.token_description':
     'To access for your orders data app uses token, witch can be created in your account settings',
+  'settings.portfolio': 'Portfolio',
+  'settings.account': 'Account',
+  'settings.select_account': 'Select account',
 };
 
 addMessages('en-US', enDict);

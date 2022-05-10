@@ -12,11 +12,11 @@
 
 <SettingsGroupItem>
   <div class="container" on:click={click}>
-    <span>{title}</span>
-    <span class="value-container">
-      <span>{value == undefined ? $translate('common.select') : value}</span>
+    <span class="title">{title}</span>
+    <div class="value-container">
+      <span class="value-text">{value == undefined ? $translate('common.select') : value}</span>
       <span class="indicator" />
-    </span>
+    </div>
   </div>
 </SettingsGroupItem>
 
@@ -29,12 +29,25 @@
     justify-content: space-between;
     cursor: pointer;
     padding: 0 10px;
+    gap: 10px;
+    overflow: auto;
+  }
+  .title {
+    white-space: nowrap;
   }
   .value-container {
     color: var(--secondary-text-color);
     display: flex;
     align-items: center;
     gap: 5px;
+    overflow: auto;
+  }
+  .value-text {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    max-width: calc(100% - 25px);
+    overflow: auto;
   }
   .indicator {
     width: 20px;

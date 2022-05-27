@@ -30,7 +30,7 @@
     cursor: pointer;
     padding: 0 10px;
     gap: 10px;
-    overflow: auto;
+    overflow: hidden;
   }
   .title {
     white-space: nowrap;
@@ -40,14 +40,14 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    overflow: auto;
+    overflow: hidden;
   }
   .value-text {
     text-overflow: ellipsis;
     white-space: nowrap;
     display: inline-block;
     max-width: calc(100% - 25px);
-    overflow: auto;
+    overflow: hidden;
   }
   .indicator {
     width: 20px;

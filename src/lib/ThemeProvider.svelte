@@ -22,6 +22,8 @@
     --background-color: rgb(242, 242, 242);
     --header-background-color: white;
 
+    --red-color: #dc3545;
+    --green-color: #28a745;
     --white-color: white;
     --active-color: rgb(47, 149, 220);
 
@@ -36,6 +38,8 @@
     --background-color: black;
     --header-background-color: rgb(18, 18, 18);
 
+    --red-color: #dc3545;
+    --green-color: #28a745;
     --white-color: white;
     --active-color: rgb(47, 149, 220);
 

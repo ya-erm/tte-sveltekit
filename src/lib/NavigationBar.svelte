@@ -51,6 +51,7 @@
     background-color: var(--header-background-color);
     border-bottom: 1px solid var(--border-color);
     align-items: center;
+    flex-shrink: 0;
     height: 60px;
   }
   .navigation-title {

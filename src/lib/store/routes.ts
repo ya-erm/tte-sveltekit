@@ -10,6 +10,10 @@ export const routes: { [key: string]: Route } = {
     path: '/',
     title: 'portfolio.title',
   },
+  portfolio: {
+    path: '/portfolio',
+    title: 'portfolio.title',
+  },
   settings: {
     path: '/settings',
     title: 'settings.title',

@@ -13,7 +13,7 @@ export const menu = readable<MenuItem[]>([
   {
     icon: '/icons/format-list-bulleted.svg',
     title: 'portfolio.title',
-    path: routes.root.path,
+    path: routes.portfolio.path,
   },
   {
     icon: '/icons/cog-outline.svg',

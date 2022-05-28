@@ -1,19 +1,20 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { translate } from '$lib/translate';
+  import { derived } from 'svelte/store';
   import { menu } from './store/menu';
 
-  function isActive(path: string) {
-    return $page.url.pathname === path;
-  }
+  const isActive = derived(page, (page) => {
+    return (path: string) => page.url.pathname === path;
+  });
 </script>
 
 <div class="menu-bar">
   {#each $menu as item}
-    <a href={item.path} class="menu-item" class:active={isActive(item.path)}>
+    <a href={item.path} class="menu-item" class:active={$isActive(item.path)}>
       <div
         class="icon"
-        class:active={isActive(item.path)}
+        class:active={$isActive(item.path)}
         style={`mask-image:url('${item.icon}'); -webkit-mask-image:url('${item.icon}')`}
       />
       <span>{$translate(item.title)}</span>

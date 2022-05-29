@@ -1,9 +1,19 @@
 <script lang="ts">
   import { page } from '$app/stores';
   import { translate } from '$lib/translate';
-  import { backLink } from './store/navigation';
+  import { derived } from 'svelte/store';
+  import { backLink, title } from './store/navigation';
   import { findRoute } from './store/routes';
+
+  const titleText = derived([page, translate, title], ([page, translate, title]) => {
+    const route = findRoute(page.url.pathname);
+    return route ? translate(route.title) : title ?? '';
+  });
 </script>
+
+<svelte:head>
+  <title>{$titleText}</title>
+</svelte:head>
 
 <div class="navigation-bar">
   <div class="navigation-back-button">
@@ -15,7 +25,7 @@
     {/if}
   </div>
   <div class="navigation-title">
-    {$translate(findRoute($page.url.pathname)?.title ?? 'settings.title')}
+    {$titleText}
   </div>
   <div />
 </div>

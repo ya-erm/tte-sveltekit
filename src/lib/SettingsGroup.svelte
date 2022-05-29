@@ -7,9 +7,11 @@
   <div class="settings-group-container">
     <slot />
   </div>
-  <div class="settings-group-description">
-    <slot name="description" />
-  </div>
+  {#if $$slots.description}
+    <div class="settings-group-description">
+      <slot name="description" />
+    </div>
+  {/if}
 </div>
 
 <style>

@@ -3,13 +3,17 @@
   import PositionTitle from '$lib/PositionTitle.svelte';
   import SettingsGroup from '$lib/SettingsGroup.svelte';
   import SettingsGroupItem from '$lib/SettingsGroupItem.svelte';
+  import { fills } from '$lib/store/fills';
+  import { backLink } from '$lib/store/navigation';
   import { positions } from '$lib/store/positions';
-  import { printCurrency, printGroupName, printMoney } from '$lib/utils';
+  import { translate } from '$lib/translate';
+  import { printGroupName, printMoney } from '$lib/utils';
   import { derived } from 'svelte/store';
+  import { routes } from '$lib/store/routes';
+  import { goto } from '$app/navigation';
 
   const groups = derived(positions, (positions) =>
     positions
-      .filter(({ quantity }) => quantity > 0)
       .map(({ instrumentType }) => ({ id: instrumentType }))
       .filter((value, index, arr) => arr.findIndex((x) => x.id == value.id) === index),
   );
@@ -18,39 +22,32 @@
 <div>
   {#each $groups as group}
     <SettingsGroup title={$printGroupName(group.id)}>
-      {#each $positions.filter((p) => p.instrumentType == group.id && p.quantity > 0) as position}
+      {#each $positions.filter((p) => p.instrumentType == group.id) as position}
         <SettingsGroupItem>
-          <div class="item-container">
+          <div
+            class="item-container"
+            on:click={() => {
+              backLink.set(routes.fills.path);
+              goto(`${routes.fills.path}/${position.ticker}`);
+            }}
+          >
             <PositionAvatar {position} />
             <div class="info">
               <div class="row">
-                <PositionTitle {position} />
-                <div class="bold">
-                  {printMoney(position.quantity * (position.currentPrice ?? 0), position.currency)}
+                <div class="left">
+                  <PositionTitle {position} />
+                  <div class="subtitle" style="margin-top: 2px;">
+                    {$translate('fills.position.fills_count', {
+                      values: { count: $fills[position.figi].length },
+                    })}
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="change">
-                  <span>{position.quantity}</span>
-                  <span>•</span>
-                  <span>{printMoney(position.average)}</span>
-                  <span>→</span>
-                  <span>{printMoney(position.currentPrice)}</span>
-                  <span>{printCurrency(position.currency)}</span>
-                </div>
-                <div
-                  class="expected"
-                  class:loss={(position.expectedYield ?? 0) < 0}
-                  class:profit={(position.expectedYield ?? 0) > 0}
-                >
-                  <span>{printMoney(position.expectedYield, position.currency, true)}</span>
-                  <span>
-                    ({printMoney(
-                      (100 * (position.expectedYield ?? 0)) /
-                        (position.quantity * (position.average ?? 1)),
-                      '%',
-                      true,
-                    )})
+                <div class="right">
+                  <span
+                    class:loss={(position.fixedPnL ?? 0) < 0}
+                    class:profit={(position.fixedPnL ?? 0) > 0}
+                  >
+                    {printMoney(position.fixedPnL, position.currency, true)}
                   </span>
                 </div>
               </div>
@@ -72,6 +69,10 @@
     gap: 10px;
     flex-grow: 1;
     max-width: calc(100% - 20px);
+    cursor: pointer;
+  }
+  .item-container:hover {
+    background-color: var(--hover-background-color);
   }
   .info {
     flex-grow: 1;
@@ -81,20 +82,20 @@
   .row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 5px;
   }
-  .bold {
-    font-weight: 600;
+  .subtitle {
+    opacity: 0.7;
+    font-size: 0.9em;
   }
-  .change {
-    display: flex;
-    gap: 2px;
-  }
-  .expected {
-    text-align: right;
+  .left {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+  }
+  .right {
+    text-align: right;
   }
   .profit {
     color: var(--green-color);

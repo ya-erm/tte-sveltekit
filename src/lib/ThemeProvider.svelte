@@ -16,34 +16,38 @@
 <style>
   :global(body) {
     --primary-text-color: black;
-    --secondary-text-color: rgb(127, 127, 127);
-    --active-text-color: rgb(47, 149, 220);
+    --secondary-text-color: #7f7f7f;
+    --active-text-color: #2f95dc;
 
-    --background-color: rgb(242, 242, 242);
+    --background-color: #f2f2f2;
     --header-background-color: white;
 
     --red-color: #dc3545;
     --green-color: #28a745;
     --white-color: white;
-    --active-color: rgb(47, 149, 220);
+    --active-color: #2f95dc;
 
-    --border-color: rgb(216, 216, 216);
+    --hover-background-color: #eff4f9;
+
+    --border-color: #d8d8d8;
   }
 
   :global(body.dark-mode) {
     --primary-text-color: white;
-    --secondary-text-color: rgb(127, 127, 127);
+    --secondary-text-color: #7f7f7f;
     --active-text-color: white;
 
     --background-color: black;
-    --header-background-color: rgb(18, 18, 18);
+    --header-background-color: #121212;
 
     --red-color: #dc3545;
     --green-color: #28a745;
     --white-color: white;
-    --active-color: rgb(47, 149, 220);
+    --active-color: #2f95dc;
 
-    --border-color: rgb(39, 39, 41);
+    --hover-background-color: #1b1b1c;
+
+    --border-color: #272729;
   }
 
   :global(a) {

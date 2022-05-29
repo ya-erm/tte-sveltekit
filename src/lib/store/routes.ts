@@ -14,6 +14,10 @@ export const routes: { [key: string]: Route } = {
     path: '/portfolio',
     title: 'portfolio.title',
   },
+  fills: {
+    path: '/fills',
+    title: 'fills.title',
+  },
   settings: {
     path: '/settings',
     title: 'settings.title',

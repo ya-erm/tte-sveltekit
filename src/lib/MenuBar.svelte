@@ -3,6 +3,7 @@
   import { translate } from '$lib/translate';
   import { derived } from 'svelte/store';
   import { menu } from './store/menu';
+  import { backLink } from './store/navigation';
 
   const isActive = derived(page, (page) => {
     return (path: string) => page.url.pathname === path;
@@ -11,13 +12,18 @@
 
 <div class="menu-bar">
   {#each $menu as item}
-    <a href={item.path} class="menu-item" class:active={$isActive(item.path)}>
+    <a
+      href={item.path}
+      class="menu-item"
+      class:active={$isActive(item.path)}
+      on:click={() => backLink.set(null)}
+    >
       <div
         class="icon"
         class:active={$isActive(item.path)}
         style={`mask-image:url('${item.icon}'); -webkit-mask-image:url('${item.icon}')`}
       />
-      <span>{$translate(item.title)}</span>
+      <span class="text">{$translate(item.title)}</span>
     </a>
   {/each}
 </div>
@@ -56,5 +62,8 @@
   .menu-item:hover .icon,
   .menu-item .icon.active {
     background-color: var(--active-color);
+  }
+  .menu-item .text {
+    font-size: 0.7em;
   }
 </style>

@@ -1,13 +1,13 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { OperationType, type Fill } from '$lib/model';
+  import Loading from '$lib/Loading.svelte';
+  import { OperationType } from '$lib/model';
   import { fills as fillsByFigi } from '$lib/store/fills';
   import { backLink, title } from '$lib/store/navigation';
   import { positions } from '$lib/store/positions';
   import { routes } from '$lib/store/routes';
   import { translate } from '$lib/translate';
   import { printMoney } from '$lib/utils';
-  import { date } from 'svelte-i18n';
   import { derived } from 'svelte/store';
 
   const ticker = $page.params['id'];
@@ -29,10 +29,7 @@
 
 <div class="container">
   {#if !$positions.length || !$fillsByFigi}
-    <div class="center">
-      <!-- TODO: Replace by component -->
-      {$translate('common.loading')}
-    </div>
+    <Loading />
   {:else if !$figi || $fills.length === 0}
     <div class="center">
       <div>{$translate('fills.instrument_not_found')}</div>
@@ -89,6 +86,7 @@
 <style>
   .container {
     padding: 10px;
+    font-size: 13px;
   }
   table {
     width: 100%;

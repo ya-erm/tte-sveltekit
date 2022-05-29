@@ -1,8 +1,10 @@
 <script lang="ts">
+  import Loading from '$lib/Loading.svelte';
   import PositionAvatar from '$lib/PositionAvatar.svelte';
   import PositionTitle from '$lib/PositionTitle.svelte';
   import SettingsGroup from '$lib/SettingsGroup.svelte';
   import SettingsGroupItem from '$lib/SettingsGroupItem.svelte';
+  import { backLink } from '$lib/store/navigation';
   import { positions } from '$lib/store/positions';
   import { printCurrency, printGroupName, printMoney } from '$lib/utils';
   import { derived } from 'svelte/store';
@@ -13,58 +15,67 @@
       .map(({ instrumentType }) => ({ id: instrumentType }))
       .filter((value, index, arr) => arr.findIndex((x) => x.id == value.id) === index),
   );
+
+  backLink.set(null);
 </script>
 
 <div>
-  {#each $groups as group}
-    <SettingsGroup title={$printGroupName(group.id)}>
-      {#each $positions.filter((p) => p.instrumentType == group.id && p.quantity > 0) as position}
-        <SettingsGroupItem>
-          <div class="item-container">
-            <PositionAvatar {position} />
-            <div class="info">
-              <div class="row">
-                <PositionTitle {position} />
-                <div class="bold">
-                  {printMoney(position.quantity * (position.currentPrice ?? 0), position.currency)}
+  {#if !$positions.length}
+    <Loading />
+  {:else}
+    {#each $groups as group}
+      <SettingsGroup title={$printGroupName(group.id)}>
+        {#each $positions.filter((p) => p.instrumentType == group.id && p.quantity > 0) as position}
+          <SettingsGroupItem>
+            <div class="item-container">
+              <PositionAvatar {position} />
+              <div class="info">
+                <div class="row">
+                  <PositionTitle {position} />
+                  <div class="bold">
+                    {printMoney(
+                      position.quantity * (position.currentPrice ?? 0),
+                      position.currency,
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="change">
-                  <span>{position.quantity}</span>
-                  <span>•</span>
-                  <span>{printMoney(position.average)}</span>
-                  <span>→</span>
-                  <span>{printMoney(position.currentPrice)}</span>
-                  <span>{printCurrency(position.currency)}</span>
-                </div>
-                <div
-                  class="expected"
-                  class:loss={(position.expectedYield ?? 0) < 0}
-                  class:profit={(position.expectedYield ?? 0) > 0}
-                >
-                  <span>{printMoney(position.expectedYield, position.currency, true)}</span>
-                  <span>
-                    ({printMoney(
-                      (100 * (position.expectedYield ?? 0)) /
-                        (position.quantity * (position.average ?? 1)),
-                      '%',
-                      true,
-                    )})
-                  </span>
+                <div class="row">
+                  <div class="change">
+                    <span>{position.quantity}</span>
+                    <span>•</span>
+                    <span>{printMoney(position.average)}</span>
+                    <span>→</span>
+                    <span>{printMoney(position.currentPrice)}</span>
+                    <span>{printCurrency(position.currency)}</span>
+                  </div>
+                  <div
+                    class="expected"
+                    class:loss={(position.expectedYield ?? 0) < 0}
+                    class:profit={(position.expectedYield ?? 0) > 0}
+                  >
+                    <span>{printMoney(position.expectedYield, position.currency, true)}</span>
+                    <span>
+                      ({printMoney(
+                        (100 * (position.expectedYield ?? 0)) /
+                          (position.quantity * (position.average ?? 1)),
+                        '%',
+                        true,
+                      )})
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </SettingsGroupItem>
-      {/each}
-    </SettingsGroup>
-  {/each}
+          </SettingsGroupItem>
+        {/each}
+      </SettingsGroup>
+    {/each}
+  {/if}
 </div>
 
 <style>
   .item-container {
-    font-size: 0.9em;
+    font-size: 13px;
     height: 40px;
     padding: 10px;
     display: flex;

@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { goto } from '$app/navigation';
+  import Loading from '$lib/Loading.svelte';
   import PositionAvatar from '$lib/PositionAvatar.svelte';
   import PositionTitle from '$lib/PositionTitle.svelte';
   import SettingsGroup from '$lib/SettingsGroup.svelte';
@@ -6,62 +8,67 @@
   import { fills } from '$lib/store/fills';
   import { backLink } from '$lib/store/navigation';
   import { positions } from '$lib/store/positions';
+  import { routes } from '$lib/store/routes';
   import { translate } from '$lib/translate';
   import { printGroupName, printMoney } from '$lib/utils';
   import { derived } from 'svelte/store';
-  import { routes } from '$lib/store/routes';
-  import { goto } from '$app/navigation';
 
   const groups = derived(positions, (positions) =>
     positions
       .map(({ instrumentType }) => ({ id: instrumentType }))
       .filter((value, index, arr) => arr.findIndex((x) => x.id == value.id) === index),
   );
+
+  backLink.set(null);
 </script>
 
 <div>
-  {#each $groups as group}
-    <SettingsGroup title={$printGroupName(group.id)}>
-      {#each $positions.filter((p) => p.instrumentType == group.id) as position}
-        <SettingsGroupItem>
-          <div
-            class="item-container"
-            on:click={() => {
-              backLink.set(routes.fills.path);
-              goto(`${routes.fills.path}/${position.ticker}`);
-            }}
-          >
-            <PositionAvatar {position} />
-            <div class="info">
-              <div class="row">
-                <div class="left">
-                  <PositionTitle {position} />
-                  <div class="subtitle" style="margin-top: 2px;">
-                    {$translate('fills.position.fills_count', {
-                      values: { count: $fills[position.figi].length },
-                    })}
+  {#if !$positions.length}
+    <Loading />
+  {:else}
+    {#each $groups as group}
+      <SettingsGroup title={$printGroupName(group.id)}>
+        {#each $positions.filter((p) => p.instrumentType == group.id) as position}
+          <SettingsGroupItem>
+            <div
+              class="item-container"
+              on:click={() => {
+                backLink.set(routes.fills.path);
+                goto(`${routes.fills.path}/${position.ticker}`);
+              }}
+            >
+              <PositionAvatar {position} />
+              <div class="info">
+                <div class="row">
+                  <div class="left">
+                    <PositionTitle {position} />
+                    <div class="subtitle" style="margin-top: 2px;">
+                      {$translate('fills.position.fills_count', {
+                        values: { count: $fills[position.figi].length },
+                      })}
+                    </div>
                   </div>
-                </div>
-                <div class="right">
-                  <span
-                    class:loss={(position.fixedPnL ?? 0) < 0}
-                    class:profit={(position.fixedPnL ?? 0) > 0}
-                  >
-                    {printMoney(position.fixedPnL, position.currency, true)}
-                  </span>
+                  <div class="right">
+                    <span
+                      class:loss={(position.fixedPnL ?? 0) < 0}
+                      class:profit={(position.fixedPnL ?? 0) > 0}
+                    >
+                      {printMoney(position.fixedPnL, position.currency, true)}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </SettingsGroupItem>
-      {/each}
-    </SettingsGroup>
-  {/each}
+          </SettingsGroupItem>
+        {/each}
+      </SettingsGroup>
+    {/each}
+  {/if}
 </div>
 
 <style>
   .item-container {
-    font-size: 0.9em;
+    font-size: 13px;
     height: 40px;
     padding: 10px;
     display: flex;

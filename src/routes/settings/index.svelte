@@ -14,6 +14,8 @@
     backLink.set(routes.settings.path);
     goto(path);
   }
+
+  backLink.set(null);
 </script>
 
 <SettingsGroup title={$translate('settings.common')}>

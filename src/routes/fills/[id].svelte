@@ -8,23 +8,29 @@
   import { routes } from '$lib/store/routes';
   import { translate } from '$lib/translate';
   import { printMoney } from '$lib/utils';
-  import { derived } from 'svelte/store';
+  import { groupBy } from '$lib/utils/groupBy';
+  import { derived, writable } from 'svelte/store';
 
   const ticker = $page.params['id'];
   title.set(ticker);
 
   const figi = derived(positions, (positions) => positions.find((p) => p.ticker == ticker)?.figi);
-
-  const fills = derived([fillsByFigi, figi], ([fills, figi]) => {
+  const executedFills = derived([fillsByFigi, figi], ([fills, figi]) => {
     if (!fills || !figi) return [];
-    return fills[figi].filter((x) => x.quantityExecuted > 0).reverse();
+    return fills[figi].filter((x) => x.quantityExecuted > 0);
   });
 
-  const groups = derived(fills, (fills) => {
-    return fills
-      .map(({ date }) => new Date(date).toLocaleDateString())
-      .filter((value, index, arr) => arr.findIndex((x) => x == value) === index);
-  });
+  const limit = writable(50);
+  const showMore = () => limit.update((prev) => prev + 50);
+  const hasMore = derived([executedFills, limit], ([fills, limit]) => fills.length > limit);
+
+  const fills = derived([executedFills, limit], ([fills, limit]) =>
+    fills.reverse().slice(0, limit),
+  );
+
+  const groups = derived(fills, (fills) =>
+    groupBy(fills, ({ date }) => new Date(date).toLocaleDateString()),
+  );
 </script>
 
 <div class="container">
@@ -40,15 +46,15 @@
   {:else}
     <table>
       <tbody>
-        {#each $groups as date}
+        {#each Object.keys($groups) as date}
           <tr class="table-group-title">
             <td>{date}</td>
           </tr>
-          {#each $fills.filter((x) => new Date(x.date).toLocaleDateString() == date) as fill, index}
+          {#each $groups[date] as fill, index}
             <tr
+              class="fill-row"
               class:first-row-in-group={index == 0}
-              class:last-row-in-group={index ==
-                $fills.filter((x) => new Date(x.date).toLocaleDateString() == date).length - 1}
+              class:last-row-in-group={index == $groups[date].length - 1}
             >
               <td>
                 <div class="secondary">
@@ -78,6 +84,23 @@
             </tr>
           {/each}
         {/each}
+        <tr>
+          <td colspan="3" class="shown-count">
+            <div style="margin-bottom: 5px;">
+              {$translate('fills.shown_count', {
+                values: {
+                  count: $fills.length,
+                  total: $executedFills.length,
+                },
+              })}
+            </div>
+            {#if $hasMore}
+              <div class="show-more" on:click={showMore}>
+                {$translate('common.show_more')}
+              </div>
+            {/if}
+          </td>
+        </tr>
       </tbody>
     </table>
   {/if}
@@ -92,7 +115,7 @@
     width: 100%;
     border-collapse: collapse;
   }
-  tr:not(.table-group-title) {
+  tr.fill-row {
     background-color: var(--header-background-color);
   }
   .table-group-title {
@@ -114,7 +137,7 @@
   .last-row-in-group td:last-child {
     border-bottom-right-radius: 10px;
   }
-  tr:not(.table-group-title):not(.last-row-in-group) {
+  tr.fill-row:not(.last-row-in-group) {
     border-bottom: 1px solid var(--border-color);
   }
   td {
@@ -133,6 +156,21 @@
   }
   .loss {
     color: var(--red-color);
+  }
+  .shown-count {
+    text-align: center;
+    color: var(--secondary-text-color);
+  }
+  .show-more {
+    text-align: center;
+    color: var(--active-color);
+    cursor: pointer;
+  }
+  .show-more:hover {
+    opacity: 0.9;
+  }
+  .show-more:active {
+    opacity: 0.75;
   }
   .center {
     padding: 20px;

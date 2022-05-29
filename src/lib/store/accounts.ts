@@ -6,9 +6,8 @@ import { storable } from './storable';
 export const accounts = writable<V1Account[]>([]);
 
 initialised.subscribe(async (initialised) => {
-  if (!initialised) {
-    return;
-  }
+  if (!initialised) return;
+
   try {
     const result = await usersApi.usersServiceGetAccounts({});
     accounts.set(result.data.accounts ?? []);

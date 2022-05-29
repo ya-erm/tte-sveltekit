@@ -62,10 +62,13 @@ async function loadFuturesAsync() {
   }
 }
 
-initialised.subscribe(async () => {
+initialised.subscribe(async (initialised) => {
+  if (!initialised) return;
+
   const shares = await loadSharesAsync();
   const bonds = await loadBondsAsync();
   const etfs = await loadEtfsAsync();
   const futures = await loadFuturesAsync();
+
   instruments.set([...shares, ...bonds, ...etfs, ...futures]);
 });

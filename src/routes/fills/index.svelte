@@ -44,7 +44,9 @@
                     <PositionTitle {position} />
                     <div class="subtitle" style="margin-top: 2px;">
                       {$translate('fills.position.fills_count', {
-                        values: { count: $fills[position.figi].length },
+                        values: {
+                          count: $fills[position.figi].filter((x) => x.quantityExecuted > 0).length,
+                        },
                       })}
                     </div>
                   </div>

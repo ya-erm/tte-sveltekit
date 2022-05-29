@@ -6,9 +6,12 @@ export const ruDict: Dictionary = {
   'common.select': 'Выбрать',
   'common.available_variants': 'Доступные варианты',
   'common.loading': 'Загрузка...',
+  'common.show_more': 'Показать ещё',
   'fills.title': 'Сделки',
   'fills.instrument_not_found': 'Не удалось найти сделки по инструменту',
   'fills.return_to_fills': 'Вернуться к списку позиций',
+  'fills.shown_count':
+    'Отображено {count, plural, one {# сделка} few {# сделки} other {# сделок}} из {total}',
   'fills.position.fills_count':
     '{count, plural, =0 {нет сделок} one {# сделка} few {# сделки} other {# сделок}}',
   'instrument.groups.share': 'Акции',

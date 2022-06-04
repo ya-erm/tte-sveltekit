@@ -29,6 +29,8 @@ export const ruDict: Dictionary = {
   'settings.security': 'Безопасность',
   'settings.token': 'API токен',
   'settings.enter_token': 'Введите API токен',
+  'settings.for_data_access_in': 'для доступа к данным в',
+  'settings.in_settings': 'Настройках',
   'settings.token_description':
     'Для доступа к данным о сделках используется токен, создать его можно в настройках личного кабинета',
   'settings.portfolio': 'Портфель',

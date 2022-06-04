@@ -10,11 +10,6 @@
   import { token } from '$lib/store/token';
   import { activeLocaleName, translate } from '$lib/translate';
 
-  function open(path: string) {
-    backLink.set(routes.settings.path);
-    goto(path);
-  }
-
   backLink.set(null);
 </script>
 
@@ -23,7 +18,7 @@
   <SettingsSelectItem
     title={$translate('settings.language')}
     value={$activeLocaleName}
-    on:click={() => open(routes['settings.language'].path)}
+    on:click={() => goto(routes['settings.language'].path)}
   />
 </SettingsGroup>
 
@@ -31,7 +26,7 @@
   <SettingsSelectItem
     title={$translate('settings.token')}
     value={$token || $translate('settings.enter_token')}
-    on:click={() => open(routes['settings.token'].path)}
+    on:click={() => goto(routes['settings.token'].path)}
   />
 </SettingsGroup>
 
@@ -39,6 +34,6 @@
   <SettingsSelectItem
     title={$translate('settings.account')}
     value={$selectedAccount?.name || $translate('settings.select_account')}
-    on:click={() => open(routes['settings.account'].path)}
+    on:click={() => goto(routes['settings.account'].path)}
   />
 </SettingsGroup>

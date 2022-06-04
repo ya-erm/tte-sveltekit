@@ -27,6 +27,8 @@ export const enDict: Dictionary = {
   'settings.security': 'Security',
   'settings.token': 'API token',
   'settings.enter_token': 'Enter API token',
+  'settings.for_data_access_in': 'to get access for data in',
+  'settings.in_settings': 'Settings',
   'settings.token_description':
     'To access for your orders data app uses token, witch can be created in your account settings',
   'settings.portfolio': 'Portfolio',

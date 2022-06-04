@@ -1,9 +1,9 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import Loading from '$lib/Loading.svelte';
   import { OperationType } from '$lib/model';
+  import NotConfiguredWrapper from '$lib/NotConfiguredWrapper.svelte';
   import { fills as fillsByFigi } from '$lib/store/fills';
-  import { backLink, title } from '$lib/store/navigation';
+  import { title } from '$lib/store/navigation';
   import { positions } from '$lib/store/positions';
   import { routes } from '$lib/store/routes';
   import { translate } from '$lib/translate';
@@ -33,78 +33,80 @@
   );
 </script>
 
-<div class="container">
-  {#if !$positions.length || !$fillsByFigi}
-    <Loading />
-  {:else if !$figi || $fills.length === 0}
-    <div class="center">
-      <div>{$translate('fills.instrument_not_found')}</div>
-      <a href={routes.fills.path} on:click={() => backLink.set(null)}>
-        {$translate('fills.return_to_fills')}
-      </a>
-    </div>
-  {:else}
-    <table>
-      <tbody>
-        {#each Object.keys($groups) as date}
-          <tr class="table-group-title">
-            <td>{date}</td>
-          </tr>
-          {#each $groups[date] as fill, index}
-            <tr
-              class="fill-row"
-              class:first-row-in-group={index == 0}
-              class:last-row-in-group={index == $groups[date].length - 1}
-            >
-              <td>
-                <div class="secondary">
-                  {new Date(fill.date).toLocaleTimeString()}
-                </div>
-                <div class="description">
-                  {(fill.operationType === OperationType.Buy ? '+' : '-') + fill.quantityExecuted} •
-                  {printMoney(fill.price, fill.currency)}
-                </div>
-              </td>
-              <td>
-                <div class="secondary">
-                  {printMoney((fill.averagePrice ?? 0) * fill.currentQuantity, fill.currency)}
-                </div>
-                <div>
-                  {fill.currentQuantity}
-                  {#if fill.averagePrice}
-                    ~{printMoney(fill.averagePrice, fill.currency)}
-                  {/if}
-                </div>
-              </td>
-              <td class="right">
-                <span class:loss={(fill.fixedPnL ?? 0) < 0} class:profit={(fill.fixedPnL ?? 0) > 0}>
-                  {printMoney(fill.fixedPnL, fill.currency, true)}
-                </span>
-              </td>
+<NotConfiguredWrapper loading={!$positions.length || !$fillsByFigi}>
+  <div class="container">
+    {#if !$figi || $fills.length === 0}
+      <div class="center">
+        <div>{$translate('fills.instrument_not_found')}</div>
+        <a href={routes.fills.path}>{$translate('fills.return_to_fills')} </a>
+      </div>
+    {:else}
+      <table>
+        <tbody>
+          {#each Object.keys($groups) as date}
+            <tr class="table-group-title">
+              <td>{date}</td>
             </tr>
+            {#each $groups[date] as fill, index}
+              <tr
+                class="fill-row"
+                class:first-row-in-group={index == 0}
+                class:last-row-in-group={index == $groups[date].length - 1}
+              >
+                <td>
+                  <div class="secondary">
+                    {new Date(fill.date).toLocaleTimeString()}
+                  </div>
+                  <div class="description">
+                    {(fill.operationType === OperationType.Buy ? '+' : '-') + fill.quantityExecuted}
+                    •
+                    {printMoney(fill.price, fill.currency)}
+                  </div>
+                </td>
+                <td>
+                  <div class="secondary">
+                    {printMoney((fill.averagePrice ?? 0) * fill.currentQuantity, fill.currency)}
+                  </div>
+                  <div>
+                    {fill.currentQuantity}
+                    {#if fill.averagePrice}
+                      ~{printMoney(fill.averagePrice, fill.currency)}
+                    {/if}
+                  </div>
+                </td>
+                <td class="right">
+                  <span
+                    class:loss={(fill.fixedPnL ?? 0) < 0}
+                    class:profit={(fill.fixedPnL ?? 0) > 0}
+                  >
+                    {printMoney(fill.fixedPnL, fill.currency, true)}
+                  </span>
+                </td>
+              </tr>
+            {/each}
           {/each}
-        {/each}
-        <tr>
-          <td colspan="3" class="shown-count">
-            <div style="margin-bottom: 5px;">
-              {$translate('fills.shown_count', {
-                values: {
-                  count: $fills.length,
-                  total: $executedFills.length,
-                },
-              })}
-            </div>
-            {#if $hasMore}
-              <div class="show-more" on:click={showMore}>
-                {$translate('common.show_more')}
+          <tr>
+            <td colspan="3" class="shown-count">
+              <div style="margin-bottom: 5px;">
+                {$translate('fills.shown_count', {
+                  values: {
+                    count: $fills.length,
+                    total: $executedFills.length,
+                  },
+                })}
               </div>
-            {/if}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  {/if}
-</div>
+              {#if $hasMore}
+                <div class="show-more" on:click={showMore}>
+                  {$translate('common.show_more')}
+                </div>
+              {/if}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    {/if}
+  </div>
+</NotConfiguredWrapper>
 
 <style>
   .container {

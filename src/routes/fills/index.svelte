@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from '$app/navigation';
-  import Loading from '$lib/Loading.svelte';
+  import NotConfiguredWrapper from '$lib/NotConfiguredWrapper.svelte';
   import PositionAvatar from '$lib/PositionAvatar.svelte';
   import PositionTitle from '$lib/PositionTitle.svelte';
   import SettingsGroup from '$lib/SettingsGroup.svelte';
@@ -22,51 +22,47 @@
   backLink.set(null);
 </script>
 
-<div>
-  {#if !$positions.length}
-    <Loading />
-  {:else}
-    {#each $groups as group}
-      <SettingsGroup title={$printGroupName(group.id)}>
-        {#each $positions.filter((p) => p.instrumentType == group.id) as position}
-          <SettingsGroupItem>
-            <div
-              class="item-container"
-              on:click={() => {
-                backLink.set(routes.fills.path);
-                goto(`${routes.fills.path}/${position.ticker}`);
-              }}
-            >
-              <PositionAvatar {position} />
-              <div class="info">
-                <div class="row">
-                  <div class="left">
-                    <PositionTitle {position} />
-                    <div class="subtitle" style="margin-top: 2px;">
-                      {$translate('fills.position.fills_count', {
-                        values: {
-                          count: $fills[position.figi].filter((x) => x.quantityExecuted > 0).length,
-                        },
-                      })}
-                    </div>
+<NotConfiguredWrapper loading={!$positions.length}>
+  {#each $groups as group}
+    <SettingsGroup title={$printGroupName(group.id)}>
+      {#each $positions.filter((p) => p.instrumentType == group.id) as position}
+        <SettingsGroupItem>
+          <div
+            class="item-container"
+            on:click={() => {
+              backLink.set(routes.fills.path);
+              goto(`${routes.fills.path}/${position.ticker}`);
+            }}
+          >
+            <PositionAvatar {position} />
+            <div class="info">
+              <div class="row">
+                <div class="left">
+                  <PositionTitle {position} />
+                  <div class="subtitle" style="margin-top: 2px;">
+                    {$translate('fills.position.fills_count', {
+                      values: {
+                        count: $fills[position.figi].filter((x) => x.quantityExecuted > 0).length,
+                      },
+                    })}
                   </div>
-                  <div class="right">
-                    <span
-                      class:loss={(position.fixedPnL ?? 0) < 0}
-                      class:profit={(position.fixedPnL ?? 0) > 0}
-                    >
-                      {printMoney(position.fixedPnL, position.currency, true)}
-                    </span>
-                  </div>
+                </div>
+                <div class="right">
+                  <span
+                    class:loss={(position.fixedPnL ?? 0) < 0}
+                    class:profit={(position.fixedPnL ?? 0) > 0}
+                  >
+                    {printMoney(position.fixedPnL, position.currency, true)}
+                  </span>
                 </div>
               </div>
             </div>
-          </SettingsGroupItem>
-        {/each}
-      </SettingsGroup>
-    {/each}
-  {/if}
-</div>
+          </div>
+        </SettingsGroupItem>
+      {/each}
+    </SettingsGroup>
+  {/each}
+</NotConfiguredWrapper>
 
 <style>
   .item-container {

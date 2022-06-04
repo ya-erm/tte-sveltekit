@@ -9,8 +9,9 @@
   function onClick(locale: Locales | string) {
     activeLocale.set(locale as Locales);
     goto(routes.settings.path);
-    backLink.set(null);
   }
+
+  backLink.set(routes.settings.path);
 </script>
 
 <SettingsGroup title={$translate('common.available_variants')}>

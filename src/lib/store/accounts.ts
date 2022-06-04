@@ -5,14 +5,23 @@ import { storable } from './storable';
 
 export const accounts = writable<V1Account[]>([]);
 
+export const accountsState = writable<'initial' | 'loading' | 'success' | 'error'>('initial');
+
 initialised.subscribe(async (initialised) => {
   if (!initialised) return;
 
   try {
+    accountsState.set('loading');
     const result = await usersApi.usersServiceGetAccounts({});
-    accounts.set(result.data.accounts ?? []);
+    if (result.status === 200 && result.data.accounts) {
+      accountsState.set('success');
+      accounts.set(result.data.accounts ?? []);
+    } else {
+      accountsState.set('error');
+    }
   } catch (e) {
     console.error(e);
+    accountsState.set('error');
   }
 });
 

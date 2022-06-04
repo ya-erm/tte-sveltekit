@@ -22,6 +22,8 @@ export type Messages =
   | 'settings.select_language'
   | 'settings.darkMode'
   | 'settings.security'
+  | 'settings.for_data_access_in'
+  | 'settings.in_settings'
   | 'settings.token'
   | 'settings.enter_token'
   | 'settings.token_description'

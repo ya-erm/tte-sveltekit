@@ -1,5 +1,5 @@
 import { addMessages } from 'svelte-i18n';
-import type { Dictionary } from './types';
+import type { Dictionary } from './messages';
 
 export const ruDict: Dictionary = {
   'common.back': 'Назад',
@@ -7,6 +7,12 @@ export const ruDict: Dictionary = {
   'common.available_variants': 'Доступные варианты',
   'common.loading': 'Загрузка...',
   'common.show_more': 'Показать ещё',
+  'common.sorting': 'Сортировка',
+  'common.sort_by': 'Поле для сортировки',
+  'common.sort_direction': 'Направление сортировки',
+  'common.ascending': 'По возрастанию',
+  'common.descending': 'По убыванию',
+  'common.grouping': 'Группировка',
   'fills.title': 'Сделки',
   'fills.instrument_not_found': 'Не удалось найти сделки по инструменту',
   'fills.return_to_fills': 'Вернуться к списку позиций',
@@ -14,6 +20,11 @@ export const ruDict: Dictionary = {
     'Отображено {count, plural, one {# сделка} few {# сделки} other {# сделок}} из {total}',
   'fills.position.fills_count':
     '{count, plural, =0 {нет сделок} one {# сделка} few {# сделки} other {# сделок}}',
+  'fills.options': 'Опции',
+  'fills.group_by_instrument_type': 'Группировать по типу актива',
+  'fills.sort_by.date': 'Дата',
+  'fills.sort_by.pnl': 'Фин. результат',
+  'fills.sort_by.quantity': 'Количество сделок',
   'instrument.groups.share': 'Акции',
   'instrument.groups.bond': 'Облигации',
   'instrument.groups.etf': 'ETF',

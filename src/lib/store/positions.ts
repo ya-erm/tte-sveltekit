@@ -1,4 +1,4 @@
-import { InstrumentType, type Position } from '$lib/model';
+import { getFillDate, InstrumentType, type Position } from '$lib/model';
 import { derived } from 'svelte/store';
 import { fills } from './fills';
 import { instruments } from './instruments';
@@ -23,6 +23,8 @@ export const positions = derived(
         fixedPnL: fills.reduce((sum, item) => sum + (item.fixedPnL ?? 0), 0),
         currentPrice: portfolioPosition?.currentPrice,
         expectedYield: portfolioPosition?.expectedYield,
+        fillsCount: fills.filter((x) => x.quantityExecuted > 0).length,
+        lastFillDate: fills[fills.length - 1] ? getFillDate(fills[fills.length - 1]) : undefined,
       };
       return position;
     });

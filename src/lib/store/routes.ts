@@ -18,6 +18,14 @@ export const routes: { [key: string]: Route } = {
     path: '/fills',
     title: 'fills.title',
   },
+  'fills.options': {
+    path: '/fills/options',
+    title: 'fills.options',
+  },
+  'fills.sorting': {
+    path: '/fills/sorting',
+    title: 'common.sorting',
+  },
   settings: {
     path: '/settings',
     title: 'settings.title',

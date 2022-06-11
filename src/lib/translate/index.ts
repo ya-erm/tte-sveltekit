@@ -1,11 +1,11 @@
 import { storable } from '$lib/store/storable';
 import { format, getLocaleFromNavigator, init, locale } from 'svelte-i18n';
 import { derived, type Readable } from 'svelte/store';
+import type { Locales, Messages } from './messages';
 import './en';
 import './ru';
-import type { Locales, Messages } from './types';
 
-export type { Locales, Messages } from './types';
+export type { Locales, Messages } from './messages';
 
 init({
   fallbackLocale: 'en-US',

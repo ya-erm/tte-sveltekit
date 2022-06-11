@@ -1,5 +1,5 @@
 import { addMessages } from 'svelte-i18n';
-import type { Dictionary } from './types';
+import type { Dictionary } from './messages';
 
 export const enDict: Dictionary = {
   'common.back': 'Back',
@@ -7,11 +7,22 @@ export const enDict: Dictionary = {
   'common.available_variants': 'Available variants',
   'common.loading': 'Loading...',
   'common.show_more': 'Show more',
+  'common.sorting': 'Sorting',
+  'common.sort_by': 'Sort by',
+  'common.sort_direction': 'Sort direction',
+  'common.ascending': 'Ascending',
+  'common.descending': 'Descending',
+  'common.grouping': 'Grouping',
   'fills.title': 'Fills',
   'fills.instrument_not_found': 'Fills for this instrument not found',
   'fills.return_to_fills': 'Return to positions list',
   'fills.shown_count': 'Shown {count, plural, one {# fill} other {# fills}} of {total}',
   'fills.position.fills_count': '{count, plural, =0 {no fills} one {# fill} other {# fills}}',
+  'fills.options': 'Options',
+  'fills.group_by_instrument_type': 'Group by asset type',
+  'fills.sort_by.date': 'date',
+  'fills.sort_by.pnl': 'profit or loss',
+  'fills.sort_by.quantity': 'fills count',
   'instrument.groups.share': 'Shares',
   'instrument.groups.bond': 'Bonds',
   'instrument.groups.etf': 'ETFs',

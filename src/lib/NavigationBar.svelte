@@ -2,7 +2,7 @@
   import { page } from '$app/stores';
   import { translate } from '$lib/translate';
   import { derived } from 'svelte/store';
-  import { backLink, title } from './store/navigation';
+  import { backLink, rightButton, title } from './store/navigation';
   import { findRoute } from './store/routes';
 
   const titleText = derived([page, translate, title], ([page, translate, title]) => {
@@ -27,7 +27,11 @@
   <div class="navigation-title">
     {$titleText}
   </div>
-  <div />
+  <div class="navigation-right-button">
+    {#if $rightButton}
+      <svelte:component this={$rightButton} />
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -67,5 +71,8 @@
   .navigation-title {
     text-align: center;
     font-size: 18px;
+  }
+  .navigation-right-button {
+    text-align: right;
   }
 </style>

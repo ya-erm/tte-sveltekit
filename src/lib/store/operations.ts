@@ -1,6 +1,6 @@
 import { operationsApi } from '$lib/api';
 import { mapMoneyValue, mapOperation } from '$lib/api/mapping';
-import { isFillOperation, type Operation } from '$lib/model';
+import { getFillDate, isFillOperation, type Operation } from '$lib/model';
 import { writable } from 'svelte/store';
 import { selectedAccount } from './accounts';
 
@@ -30,8 +30,8 @@ selectedAccount.subscribe(async (account) => {
         })
         .sort((a, b) => {
           // sort by last trade executed or order creation if no trades
-          const aDate = isFillOperation(a) ? a.trades[a.trades.length - 1]?.date ?? a.date : a.date;
-          const bDate = isFillOperation(b) ? b.trades[b.trades.length - 1]?.date ?? b.date : b.date;
+          const aDate = isFillOperation(a) ? getFillDate(a) : a.date;
+          const bDate = isFillOperation(b) ? getFillDate(b) : b.date;
           return new Date(aDate).getTime() - new Date(bDate).getTime();
         }) ?? [],
     );

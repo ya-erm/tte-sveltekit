@@ -1,111 +1,61 @@
 <script lang="ts">
-  import { goto } from '$app/navigation';
+  import FillsListItem from '$lib/FillsListItem.svelte';
+  import FillsOptionsButton from '$lib/FillsOptionsButton.svelte';
+  import { getFillDate, isFillOperation } from '$lib/model';
   import NotConfiguredWrapper from '$lib/NotConfiguredWrapper.svelte';
-  import PositionAvatar from '$lib/PositionAvatar.svelte';
-  import PositionTitle from '$lib/PositionTitle.svelte';
   import SettingsGroup from '$lib/SettingsGroup.svelte';
-  import SettingsGroupItem from '$lib/SettingsGroupItem.svelte';
-  import { fills } from '$lib/store/fills';
-  import { backLink } from '$lib/store/navigation';
+  import { fillsGroupByType, fillsSortBy, fillsSortDirection } from '$lib/store/fills';
+  import { backLink, rightButton } from '$lib/store/navigation';
   import { positions } from '$lib/store/positions';
-  import { routes } from '$lib/store/routes';
-  import { translate } from '$lib/translate';
-  import { printGroupName, printMoney } from '$lib/utils';
+  import { printGroupName } from '$lib/utils';
+  import { groupBy, toArray } from '$lib/utils/groupBy';
+  import { withSortDirection } from '$lib/utils/sorting';
+  import { onDestroy } from 'svelte';
   import { derived } from 'svelte/store';
 
+  const sortedPositions = derived(
+    [positions, fillsSortBy, fillsSortDirection],
+    ([positions, sortBy, sortDir]) =>
+      positions.sort(
+        withSortDirection(sortDir, (a, b) => {
+          switch (sortBy) {
+            case 'PnL':
+              return (a.fixedPnL ?? 0) - (b.fixedPnL ?? 0);
+            case 'quantity':
+              return (a.fillsCount ?? 0) - (b.fillsCount ?? 0);
+            case 'date':
+            default:
+              return (
+                new Date(a.lastFillDate ?? 0).getTime() - new Date(b.lastFillDate ?? 0).getTime()
+              );
+          }
+        }),
+      ),
+  );
+
   const groups = derived(positions, (positions) =>
-    positions
-      .map(({ instrumentType }) => ({ id: instrumentType }))
-      .filter((value, index, arr) => arr.findIndex((x) => x.id == value.id) === index),
+    toArray(groupBy(positions, (p) => p.instrumentType)),
   );
 
   backLink.set(null);
+  rightButton.set(FillsOptionsButton);
+  onDestroy(() => rightButton.set(null));
 </script>
 
 <NotConfiguredWrapper loading={!$positions.length}>
-  {#each $groups as group}
-    <SettingsGroup title={$printGroupName(group.id)}>
-      {#each $positions.filter((p) => p.instrumentType == group.id) as position}
-        <SettingsGroupItem>
-          <div
-            class="item-container"
-            on:click={() => {
-              backLink.set(routes.fills.path);
-              goto(`${routes.fills.path}/${position.ticker}`);
-            }}
-          >
-            <PositionAvatar {position} />
-            <div class="info">
-              <div class="row">
-                <div class="left">
-                  <PositionTitle {position} />
-                  <div class="subtitle" style="margin-top: 2px;">
-                    {$translate('fills.position.fills_count', {
-                      values: {
-                        count: $fills[position.figi].filter((x) => x.quantityExecuted > 0).length,
-                      },
-                    })}
-                  </div>
-                </div>
-                <div class="right">
-                  <span
-                    class:loss={(position.fixedPnL ?? 0) < 0}
-                    class:profit={(position.fixedPnL ?? 0) > 0}
-                  >
-                    {printMoney(position.fixedPnL, position.currency, true)}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </SettingsGroupItem>
+  {#if $fillsGroupByType}
+    {#each $groups as group}
+      <SettingsGroup title={$printGroupName(group.key)}>
+        {#each group.items as position}
+          <FillsListItem {position} />
+        {/each}
+      </SettingsGroup>
+    {/each}
+  {:else}
+    <SettingsGroup>
+      {#each $sortedPositions as position}
+        <FillsListItem {position} />
       {/each}
     </SettingsGroup>
-  {/each}
+  {/if}
 </NotConfiguredWrapper>
-
-<style>
-  .item-container {
-    font-size: 13px;
-    height: 40px;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-grow: 1;
-    max-width: calc(100% - 20px);
-    cursor: pointer;
-  }
-  .item-container:hover {
-    background-color: var(--hover-background-color);
-  }
-  .info {
-    flex-grow: 1;
-    max-width: 100%;
-    overflow: hidden;
-  }
-  .row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 5px;
-  }
-  .subtitle {
-    opacity: 0.7;
-    font-size: 0.9em;
-  }
-  .left {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .right {
-    text-align: right;
-  }
-  .profit {
-    color: var(--green-color);
-  }
-  .loss {
-    color: var(--red-color);
-  }
-</style>

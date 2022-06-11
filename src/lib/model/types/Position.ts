@@ -12,6 +12,8 @@ export type Position = {
   average: number | null;
   currentPrice?: number;
   expectedYield?: number;
+  fillsCount: number;
+  lastFillDate?: string;
 };
 
 export type PortfolioPosition = {
